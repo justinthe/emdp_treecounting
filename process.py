@@ -1,3 +1,6 @@
+# USAGE
+# python process.py -i data.jpg
+
 import numpy as np
 import cv2
 import argparse
@@ -13,7 +16,11 @@ print("[INFO] starts...")
 image = cv2.imread(args["image"])
 
 print("Shape: X: {}; Y: {}".format(image.shape[0], image.shape[1]))
-dv = Divider(image, 40, 40)
+dv = Divider(5, 6)
+img = dv.pad_image(image)
+# print("Shape 1: X: {}; Y: {}".format(img.shape[0], img.shape[1]))
+coord = dv.get_chunk_coord(img)
+dv.slice_image(img, coord)
 
 # def chunkify(img, block_width=4, block_height=4):
 #     shape = img.shape
@@ -68,46 +75,46 @@ dv = Divider(image, 40, 40)
 		# 		print("X: {}; Y: {}".format(x, y))
 
 
-def chunkify(img, colDivisor=4, rowDivisor=4):
-	shape = img.shape
-	imgWidth = shape[0]
-	imgHeight = shape[1]
+# def chunkify(img, colDivisor=4, rowDivisor=4):
+# 	shape = img.shape
+# 	imgWidth = shape[0]
+# 	imgHeight = shape[1]
 
-	x_prev = 0 
-	y_prev = 0
+# 	x_prev = 0 
+# 	y_prev = 0
 	
-	ret_coord = []
+# 	ret_coord = []
 
-	if(imgWidth % colDivisor == 0 and imgHeight % rowDivisor == 0):
-		x_indices = [i for i in range(0, imgWidth + 1, imgWidth // colDivisor)]
-		y_indices = [i for i in range(0, imgHeight + 1, imgHeight // rowDivisor)]
+# 	if(imgWidth % colDivisor == 0 and imgHeight % rowDivisor == 0):
+# 		x_indices = [i for i in range(0, imgWidth + 1, imgWidth // colDivisor)]
+# 		y_indices = [i for i in range(0, imgHeight + 1, imgHeight // rowDivisor)]
 
-		max_len = max(len(x_indices), len(y_indices))
+# 		max_len = max(len(x_indices), len(y_indices))
 
-		for z in range(0, max_len):
-			x_coord = x_prev + imgWidth // colDivisor
-			y_coord = y_prev + imgHeight // rowDivisor
+# 		for z in range(0, max_len):
+# 			x_coord = x_prev + imgWidth // colDivisor
+# 			y_coord = y_prev + imgHeight // rowDivisor
 			
-			x_tuple = (x_prev, x_coord)
-			y_tuple = (y_prev, y_coord)
+# 			x_tuple = (x_prev, x_coord)
+# 			y_tuple = (y_prev, y_coord)
 
-			coord = (x_tuple, y_tuple)
+# 			coord = (x_tuple, y_tuple)
 
-			x_prev = x_coord
-			y_prev = y_coord 
+# 			x_prev = x_coord
+# 			y_prev = y_coord 
 
-			ret_coord.append(coord)
+# 			ret_coord.append(coord)
 
-	return ret_coord
+# 	return ret_coord
 
 # image = np.array(image)
-blocks = chunkify(image, 5, 5)
+# blocks = chunkify(image, 5, 5)
 
-for x, y in blocks:
-	print("X: {}; Y: {}".format(x, y))
+# for x, y in blocks:
+# 	print("X: {}; Y: {}".format(x, y))
 
-print(image.shape)
+# print(image.shape)
 # plt.matshow(image)
 # plt.show()
-cv2.imshow("Image", image)
-cv2.waitKey(0)
+# cv2.imshow("Image", image)
+# cv2.waitKey(0)
